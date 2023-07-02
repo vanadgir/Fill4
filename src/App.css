@@ -1,38 +1,89 @@
-.App {
-  text-align: center;
+*{
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.main{
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+.title{
+  margin-top: 0%;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  border-style: solid;
+  user-select: none;
+  margin-bottom: 0%;
+}
+
+.title span:nth-child(1) {
+  color: red;
+}
+
+.title span:nth-child(2) {
+  color: orange;
+}
+
+.title span:nth-child(3) {
+  color: blue;
+}
+
+.title span:nth-child(4) {
+  color: green;
+}
+
+.title span:nth-child(5) {
   color: white;
+  background-color: black;
 }
 
-.App-link {
-  color: #61dafb;
+.game-bar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  margin-bottom: 2%;
+
+  .color-menu{
+    display: flex;
+    align-items: center;
+  
+    .palette{
+      display: flex;
+    }
+  }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button{
+  cursor: pointer;
+}
+
+.block{
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  margin: 2px;
+  border-style: dashed;
+  opacity: 80%;
+}
+
+.block:active{
+  border-color: white;
+}
+
+.selected{
+  border-style: solid;
+  opacity: 100%;
+}
+
+.grid-space{
+  display: flex;
+  font-size: x-large;
+  justify-content: center;
+  height: 60vh;
+}
+
+.color-grid{
+  display: flex;
+  justify-content: center;
 }
