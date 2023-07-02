@@ -6,6 +6,8 @@ import "./App.css";
 
 export default function App() {
   const {
+    mapDifficulty,
+    colorDifficulty,
     selectMapDifficulty,
     selectColorDifficulty,
   } = useDifficulty();
@@ -57,6 +59,10 @@ export default function App() {
             Color Difficulty: {colorDifficultySelector}
           </div>
         </div>
+        <center>
+          <br />
+          You are playing on { mapDifficulty } dfifficulty with { colorDifficulty } colors. 
+        </center>
         <GameBoard />
       </PaletteProvider>
     </div>
