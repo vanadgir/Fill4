@@ -1,22 +1,19 @@
-// import { useDifficulty } from "../contexts/DifficultyContext";
-// import { usePalette } from "../contexts/PaletteContext";
-// import { useState } from "react";
+import { useDifficulty } from "../contexts/DifficultyContext";
+import { usePalette } from "../contexts/PaletteContext";
+import { useEffect } from "react";
 
 export default function ColoringGrid() {
-  // const { mapDifficulty, colorDifficulty } = useDifficulty();
-  // const { palette, selectedId } = usePalette();
+  const { mapDifficulty, colorDifficulty  } = useDifficulty();
+  const { palette, selectedId, selectColor } = usePalette();
 
-  const fillableSquares = (
-    <div className="color-grid">
-      <span className="square"></span>
-      <span className="square"></span>
-      <span className="square"></span>
-    </div>
-  );
+  useEffect(() => {
+    let currentColor = "";
+    if (selectedId >= colorDifficulty) {
+      selectColor(palette.length - 1);
+    }
+    currentColor = palette[selectedId];
+    console.log(currentColor);
+  }, [colorDifficulty, selectedId, palette, selectColor]);
 
-  return (
-    <div>
-        {fillableSquares}
-    </div>
-  );
+  return <div className="color-grid"></div>;
 }

@@ -78,12 +78,11 @@ button{
 
 .grid-space{
   display: flex;
-  font-size: x-large;
   justify-content: center;
   height: 60vh;
 }
 
 .color-grid{
-  display: flex;
-  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
