@@ -1,7 +1,7 @@
-import { useContext, createContext, useState, useCallback } from "react";
+import { useContext, createContext, useState, useCallback, useEffect } from "react";
 import { useDifficulty } from "./DifficultyContext";
 
-// colorset data 
+// colorset data
 const colorSets = [
   [
     "#FF5733", // vivid orange
@@ -51,7 +51,7 @@ export const PaletteContext = createContext({
   selectedId: 0,
   selectColor: () => {},
   nextSet: () => {},
-  prevSet: () => {}
+  prevSet: () => {},
 });
 
 // define provider
@@ -82,8 +82,14 @@ export function PaletteProvider({ children }) {
   const palette = colorSets[paletteId].slice(0, colorDifficulty);
 
   const selectColor = useCallback((colorId) => {
-      setSelectedId(colorId);
-    }, []);
+    setSelectedId(colorId);
+  }, []);
+
+  useEffect(() => {
+    if (selectedId >= colorDifficulty) {
+      setSelectedId(palette.length - 1);
+    }
+  }, [colorDifficulty, selectedId, palette]);
 
   return (
     <PaletteContext.Provider

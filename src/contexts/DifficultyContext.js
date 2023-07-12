@@ -3,10 +3,17 @@ import { useContext, createContext, useState, useCallback } from "react";
 // information that context holds
 export const DifficultyContext = createContext({
   mapDifficulty: "",
+  numPoints: 0,
   colorDifficulty: 0,
   selectMapDifficulty: () => {},
   selectColorDifficulty: () => {}
 });
+
+const data = {
+  "easy": 25,
+  "medium": 50,
+  "hard": 100
+};
 
 // define provider
 export function DifficultyProvider({ children }) {
@@ -25,6 +32,7 @@ export function DifficultyProvider({ children }) {
     <DifficultyContext.Provider
       value={{
         mapDifficulty,
+        numPoints: data[mapDifficulty],
         colorDifficulty,
         selectMapDifficulty,
         selectColorDifficulty,
