@@ -5,5 +5,3 @@ After downloading files:
 Then run:
 
 ### `npm start`
-
-![](./public/demo.gif)
