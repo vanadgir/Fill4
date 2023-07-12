@@ -69,16 +69,17 @@ export default function ColoringGrid() {
       return { ...mapPoints[i], neighbors: [...voronoi.neighbors(i)] };
     })
   );
-  
+
   const changeColorId = useCallback(
     (pointId, colorId) => {
       console.log(`user sent ${palette[colorId]} to point ${pointId}`);
-      console.log(`point ${pointId}'s neighbors are ${voronoiData[pointId].neighbors}`);
+      console.log(
+        `point ${pointId}'s neighbors are ${voronoiData[pointId].neighbors}`
+      );
       if (
         voronoiData[pointId].neighbors.reduce((acc, currentValue) => {
-
           return (
-            acc && Boolean(voronoiData[currentValue].colorId != selectedId)
+            acc && Boolean(voronoiData[currentValue].colorId !== selectedId)
           );
         }, true)
       ) {
@@ -87,6 +88,7 @@ export default function ColoringGrid() {
         setVoronoiData(newVoronoiData);
       }
     },
+    // eslint-disable-next-line
     [voronoiData, selectedId, setVoronoiData]
   );
 
@@ -96,12 +98,13 @@ export default function ColoringGrid() {
   }, [numPoints, colorDifficulty]);
 
   useEffect(() => {
-    setVoronoiData(mapPoints.map((mapPoint, i) => {
-      return { ...mapPoints[i], neighbors: [...voronoi.neighbors(i)] };
-    }));
+    setVoronoiData(
+      mapPoints.map((mapPoint, i) => {
+        return { ...mapPoints[i], neighbors: [...voronoi.neighbors(i)] };
+      })
+    );
+    // eslint-disable-next-line
   }, [mapPoints]);
-
-  // const voronoiData = ;
 
   return (
     <div className="color-grid">
@@ -109,7 +112,6 @@ export default function ColoringGrid() {
         dim={domainMax}
         data={voronoiData}
         voronoi={voronoi}
-        delaunay={delaunay}
         callback={changeColorId}
       />
       <button onClick={() => setMapPoints(generateMapPoints())}>Reset</button>

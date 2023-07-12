@@ -40,7 +40,7 @@
 .game-bar{
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   user-select: none;
   margin-bottom: 16px;
 
@@ -92,6 +92,8 @@ button{
 .voronoi{
   display: flex;
   justify-content: center;
+  border-style: solid;
+  border-color: black;
   margin: 16px;
 }
 
