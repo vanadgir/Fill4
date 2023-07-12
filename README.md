@@ -6,4 +6,4 @@ Then run:
 
 ### `npm start`
 
-![]("\demo.gif")
+![](./public/demo.gif)
