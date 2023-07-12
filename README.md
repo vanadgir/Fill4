@@ -5,3 +5,5 @@ After downloading files:
 Then run:
 
 ### `npm start`
+
+![]("\demo.gif")
