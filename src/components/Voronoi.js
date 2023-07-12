@@ -14,7 +14,7 @@ export default function Voronoi({ dim, data, voronoi, callback }) {
               key={i}
               d={path}
               stroke="black"
-              stroke-width="2"
+              strokeWidth="2"
               fill={
                 data[i].colorId === null ? "white" : palette[data[i].colorId]
               }
