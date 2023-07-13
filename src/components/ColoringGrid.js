@@ -70,6 +70,7 @@ export default function ColoringGrid() {
     })
   );
 
+  // fill in shape with color
   const changeColorId = useCallback(
     (pointId, colorId) => {
       console.log(`user sent ${palette[colorId]} to point ${pointId}`);
@@ -92,6 +93,23 @@ export default function ColoringGrid() {
     [voronoiData, selectedId, setVoronoiData]
   );
 
+  // window dimensions
+  const getDimensions = () => {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    return [windowWidth, windowHeight];
+  };
+
+  // get num shapes filled
+  const getColorIds = (data) => {
+    let colors = [];
+    for (const item of Object.values(data)) {
+      colors = [...colors, item.colorId];
+    }
+  };
+
+  getColorIds(voronoiData);
+
   useEffect(() => {
     setMapPoints(generateMapPoints());
     // eslint-disable-next-line
@@ -105,6 +123,8 @@ export default function ColoringGrid() {
     );
     // eslint-disable-next-line
   }, [mapPoints]);
+
+  getDimensions();
 
   return (
     <div className="color-grid">

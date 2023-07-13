@@ -18,7 +18,7 @@ const data = {
 // define provider
 export function DifficultyProvider({ children }) {
   const [mapDifficulty, setMapDifficulty] = useState("easy");
-  const [colorDifficulty, setColorDifficulty] = useState(6);
+  const [colorDifficulty, setColorDifficulty] = useState(4);
 
   const selectMapDifficulty = useCallback((diff) => {
     setMapDifficulty(diff);
