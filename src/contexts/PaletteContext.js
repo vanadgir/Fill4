@@ -1,7 +1,7 @@
-import { useContext, createContext, useState, useCallback } from "react";
+import { useContext, createContext, useState, useCallback, useEffect } from "react";
 import { useDifficulty } from "./DifficultyContext";
 
-// colorset data 
+// colorset data
 const colorSets = [
   [
     "#FF5733", // vivid orange
@@ -43,6 +43,14 @@ const colorSets = [
     "#9B59B6", // deep purple
     "#27AE60", // bright green
   ],
+  [
+    "#CCCCCC", // light grey
+    "#999999", // medium grey
+    "#666666", // medium grey
+    "#333333", // dark grey
+    "#1A1A1A", // charcoal grey
+    "#000000", // dark black
+  ]
 ];
 
 // information that context holds
@@ -51,7 +59,7 @@ export const PaletteContext = createContext({
   selectedId: 0,
   selectColor: () => {},
   nextSet: () => {},
-  prevSet: () => {}
+  prevSet: () => {},
 });
 
 // define provider
@@ -62,7 +70,7 @@ export function PaletteProvider({ children }) {
   const { colorDifficulty } = useDifficulty();
 
   const nextSet = useCallback(() => {
-    const newId = (paletteId + 1) % 4;
+    const newId = (paletteId + 1) % colorSets.length;
     const newPaletteLength = colorSets[newId].length;
     if (selectedId >= newPaletteLength) {
       setSelectedId(newPaletteLength - 1);
@@ -71,7 +79,7 @@ export function PaletteProvider({ children }) {
   }, [paletteId, selectedId]);
 
   const prevSet = useCallback(() => {
-    const newId = (paletteId - 1 + 4) % 4;
+    const newId = (paletteId - 1 + colorSets.length) % colorSets.length;
     const newPaletteLength = colorSets[newId].length;
     if (selectedId >= newPaletteLength) {
       setSelectedId(newPaletteLength - 1);
@@ -82,8 +90,14 @@ export function PaletteProvider({ children }) {
   const palette = colorSets[paletteId].slice(0, colorDifficulty);
 
   const selectColor = useCallback((colorId) => {
-      setSelectedId(colorId);
-    }, []);
+    setSelectedId(colorId);
+  }, []);
+
+  useEffect(() => {
+    if (selectedId >= colorDifficulty) {
+      setSelectedId(palette.length - 1);
+    }
+  }, [colorDifficulty, selectedId, palette]);
 
   return (
     <PaletteContext.Provider

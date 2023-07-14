@@ -6,8 +6,6 @@ import "./App.css";
 
 export default function App() {
   const {
-    mapDifficulty,
-    colorDifficulty,
     selectMapDifficulty,
     selectColorDifficulty,
   } = useDifficulty();
@@ -40,9 +38,9 @@ export default function App() {
 
   const colorDifficultySelector = (
     <select id="color-difficulty" onChange={colorDiff}>
-      <option value="6">6</option>
-      <option value="5">5</option>
       <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
     </select>
   );
 
@@ -59,10 +57,6 @@ export default function App() {
             Color Difficulty: {colorDifficultySelector}
           </div>
         </div>
-        <center>
-          <br />
-          You are playing on { mapDifficulty } dfifficulty with { colorDifficulty } colors. 
-        </center>
         <GameBoard />
       </PaletteProvider>
     </div>

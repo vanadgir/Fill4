@@ -42,7 +42,7 @@
   align-items: center;
   justify-content: space-between;
   user-select: none;
-  margin-bottom: 2%;
+  margin-bottom: 16px;
 
   .color-menu{
     display: flex;
@@ -78,12 +78,26 @@ button{
 
 .grid-space{
   display: flex;
-  font-size: x-large;
   justify-content: center;
   height: 60vh;
 }
 
 .color-grid{
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.voronoi{
+  display: flex;
   justify-content: center;
+  border-style: solid;
+  border-color: black;
+  margin: 16px;
+}
+
+button{
+  width: 64px;
+  user-select: none;
 }
