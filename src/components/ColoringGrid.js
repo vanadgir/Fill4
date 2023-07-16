@@ -2,11 +2,14 @@ import * as d3 from "d3";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { useDifficulty } from "../contexts/DifficultyContext";
 import Voronoi from "./Voronoi";
+import VictoryMessage from "./VictoryMessage";
 import { usePalette } from "../contexts/PaletteContext";
 
 export default function ColoringGrid() {
   const { numPoints, colorDifficulty } = useDifficulty();
   const { palette, selectedId } = usePalette();
+  const [numNull, setNumNull] = useState(numPoints);
+  const [victoryDismissed, setVictoryDismissed] = useState(false);
 
   // sidelength for game board
   const domainMax = 480;
@@ -70,6 +73,15 @@ export default function ColoringGrid() {
     })
   );
 
+  // get num shapes filled
+  const getColorIds = (data) => {
+    let colors = [];
+    for (const item of Object.values(data)) {
+      colors = [...colors, item.colorId];
+    }
+    return colors;
+  };
+
   // fill in shape with color
   const changeColorId = useCallback(
     (pointId, colorId) => {
@@ -87,11 +99,23 @@ export default function ColoringGrid() {
         const newVoronoiData = [...voronoiData];
         newVoronoiData[pointId] = { ...newVoronoiData[pointId], colorId };
         setVoronoiData(newVoronoiData);
+        const colors = getColorIds(newVoronoiData);
+        console.log(colors);
+        setNumNull(colors.reduce((acc, i) => (i === null ? ++acc : acc), 0));
+        console.log(numNull);
       }
     },
     // eslint-disable-next-line
     [voronoiData, selectedId, setVoronoiData]
   );
+
+  const dismissVictory = useCallback(() => {
+    setVictoryDismissed(true);
+  }, []);
+
+  const clearColors = (data) => {
+    data.forEach((i) => {i.colorId = null})
+  }
 
   // window dimensions
   const getDimensions = () => {
@@ -100,18 +124,10 @@ export default function ColoringGrid() {
     return [windowWidth, windowHeight];
   };
 
-  // get num shapes filled
-  const getColorIds = (data) => {
-    let colors = [];
-    for (const item of Object.values(data)) {
-      colors = [...colors, item.colorId];
-    }
-  };
-
-  getColorIds(voronoiData);
-
   useEffect(() => {
     setMapPoints(generateMapPoints());
+    setVictoryDismissed(false);
+    setNumNull(numPoints);
     // eslint-disable-next-line
   }, [numPoints, colorDifficulty]);
 
@@ -128,13 +144,37 @@ export default function ColoringGrid() {
 
   return (
     <div className="color-grid">
-      <Voronoi
-        dim={domainMax}
-        data={voronoiData}
-        voronoi={voronoi}
-        callback={changeColorId}
-      />
-      <button onClick={() => setMapPoints(generateMapPoints())}>Reset</button>
+      {victoryDismissed || numNull > 0 ? (
+        <>
+          <Voronoi
+            dim={domainMax}
+            data={voronoiData}
+            voronoi={voronoi}
+            callback={changeColorId}
+          />
+          <span className="score">{numNull} to go!</span>
+        </>
+      ) : (
+        <VictoryMessage callback={dismissVictory} dim={domainMax} />
+      )}
+      <div className="button-grid">
+        <button 
+          onClick={() => {
+            clearColors(voronoiData);
+            setVictoryDismissed(false);
+            setNumNull(numPoints);
+          }}>Clear</button>
+        <button
+          onClick={() => {
+            setMapPoints(generateMapPoints());
+            setVictoryDismissed(false);
+            setNumNull(numPoints);
+          }}
+        >
+          New
+        </button>
+        {/* <button>Export</button>*/}
+      </div>
     </div>
   );
 }
