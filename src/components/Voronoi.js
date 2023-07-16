@@ -1,6 +1,12 @@
 import { usePalette } from "../contexts/PaletteContext";
 
-export default function Voronoi({ dim, data, voronoi, callback }) {
+export default function Voronoi({
+  dim,
+  data,
+  voronoi,
+  callbackPaint,
+  callbackErase,
+}) {
   const { palette, selectedId } = usePalette();
 
   return (
@@ -20,7 +26,11 @@ export default function Voronoi({ dim, data, voronoi, callback }) {
               }
               opacity={1.0}
               onClick={() => {
-                callback(i, selectedId);
+                callbackPaint(i, selectedId);
+              }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                callbackErase(i);
               }}
             />
           );

@@ -100,22 +100,36 @@ export default function ColoringGrid() {
         newVoronoiData[pointId] = { ...newVoronoiData[pointId], colorId };
         setVoronoiData(newVoronoiData);
         const colors = getColorIds(newVoronoiData);
-        console.log(colors);
         setNumNull(colors.reduce((acc, i) => (i === null ? ++acc : acc), 0));
-        console.log(numNull);
       }
     },
     // eslint-disable-next-line
     [voronoiData, selectedId, setVoronoiData]
   );
 
+  // remove color from shape
+  const removeColorId = useCallback(
+    (pointId) => {
+      const newVoronoiData = [...voronoiData];
+      newVoronoiData[pointId] = { ...newVoronoiData[pointId], colorId: null };
+      setVoronoiData(newVoronoiData);
+      const colors = getColorIds(newVoronoiData);
+      setNumNull(colors.reduce((acc, i) => (i === null ? ++acc : acc), 0));
+    },
+    [voronoiData, setVoronoiData]
+  );
+
+  // dismiss victory popup
   const dismissVictory = useCallback(() => {
     setVictoryDismissed(true);
   }, []);
 
+  // clear all colors
   const clearColors = (data) => {
-    data.forEach((i) => {i.colorId = null})
-  }
+    data.forEach((i) => {
+      i.colorId = null;
+    });
+  };
 
   // window dimensions
   const getDimensions = () => {
@@ -150,7 +164,8 @@ export default function ColoringGrid() {
             dim={domainMax}
             data={voronoiData}
             voronoi={voronoi}
-            callback={changeColorId}
+            callbackPaint={changeColorId}
+            callbackErase={removeColorId}
           />
           <span className="score">{numNull} to go!</span>
         </>
@@ -158,12 +173,15 @@ export default function ColoringGrid() {
         <VictoryMessage callback={dismissVictory} dim={domainMax} />
       )}
       <div className="button-grid">
-        <button 
+        <button
           onClick={() => {
             clearColors(voronoiData);
             setVictoryDismissed(false);
             setNumNull(numPoints);
-          }}>Clear</button>
+          }}
+        >
+          Clear
+        </button>
         <button
           onClick={() => {
             setMapPoints(generateMapPoints());
