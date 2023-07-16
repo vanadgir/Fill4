@@ -50,11 +50,11 @@ export default function App() {
       <PaletteProvider>
         <div className="game-bar">
           <div className="left">
-            Map Difficulty: {mapDifficultySelector}
+            Map: {mapDifficultySelector}
           </div>
           <ColorMenu />
           <div className="right">
-            Color Difficulty: {colorDifficultySelector}
+            Color: {colorDifficultySelector}
           </div>
         </div>
         <GameBoard />

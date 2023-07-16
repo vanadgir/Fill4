@@ -40,7 +40,7 @@
 .game-bar{
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   user-select: none;
   margin-bottom: 16px;
 
@@ -94,7 +94,37 @@ button{
   justify-content: center;
   border-style: solid;
   border-color: black;
-  margin: 16px;
+}
+
+.score{
+  border-style: groove;
+  font-weight: bold;
+  font-size: 32px;
+  margin: 2%;
+  padding: 1%;
+  user-select: none;
+}
+
+.dismiss{
+  position: absolute;
+  width: 5%;
+  height: 5%;
+  left: 95%;
+  top: 5%;
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+
+.winstar{
+  max-width: 100%;
+  height: auto;
+}
+
+.button-grid{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
 
 button{
