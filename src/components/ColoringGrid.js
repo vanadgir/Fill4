@@ -16,10 +16,10 @@ import { usePalette } from "../contexts/PaletteContext";
 const useDimensions = (targetRef) => {
  
   // eslint-disable-next-line
-  const getDimensions = () => {
+  const getDimensions = () => {7
     return {
-      width: targetRef.current ? targetRef.current.offsetWidth: Math.ceil(0.9*window.innerWidth),
-      height: targetRef.current ? targetRef.current.offsetHeight: Math.ceil(0.55*window.innerHeight)
+      width: targetRef.current ? targetRef.current.offsetWidth: Math.ceil(0.7*window.innerWidth),
+      height: targetRef.current ? targetRef.current.offsetHeight: Math.ceil(0.50*window.innerHeight)
     };
   };
 
