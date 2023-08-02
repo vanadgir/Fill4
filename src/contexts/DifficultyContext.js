@@ -12,7 +12,7 @@ export const DifficultyContext = createContext({
 const data = {
   "easy": 15,
   "medium": 30,
-  "hard": 60
+  "hard": 45
 };
 
 // define provider

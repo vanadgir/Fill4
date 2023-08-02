@@ -1,18 +1,63 @@
 import * as d3 from "d3";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { useDifficulty } from "../contexts/DifficultyContext";
 import Voronoi from "./Voronoi";
 import VictoryMessage from "./VictoryMessage";
 import { usePalette } from "../contexts/PaletteContext";
+
+// custom hook for window dimensions
+const useDimensions = (targetRef) => {
+  console.log((targetRef.current ? targetRef.current.offsetWidth: ""))
+  
+  // eslint-disable-next-line
+  const getDimensions = () => {
+    return {
+      width: targetRef.current ? targetRef.current.offsetWidth: window.innerWidth,
+      height: targetRef.current ? targetRef.current.offsetHeight: window.innerHeight
+    };
+  };
+
+  const [dimensions, setDimensions] = useState(getDimensions);
+
+  const handleResize = useCallback(() => {
+    setDimensions(getDimensions());
+  }, [getDimensions]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
+
+  useLayoutEffect(() => {
+    handleResize();
+    // eslint-disable-next-line
+  }, []);
+
+  return dimensions;
+};
 
 export default function ColoringGrid() {
   const { numPoints, colorDifficulty } = useDifficulty();
   const { palette, selectedId } = usePalette();
   const [numNull, setNumNull] = useState(numPoints);
   const [victoryDismissed, setVictoryDismissed] = useState(false);
+  const targetRef = useRef(null);
+  const dimensions = useDimensions(targetRef);
+
+  console.log('Width:', dimensions.width);
+  console.log('Height:', dimensions.height);
 
   // sidelength for game board
-  const domainMax = 480;
+  const domainMaxWidth = dimensions.width;
+  const domainMaxHeight = dimensions.height;
 
   // random number generator
   const randomInDomain = useCallback((max) => {
@@ -26,8 +71,8 @@ export default function ColoringGrid() {
       while (!appended) {
         let nextPoint = {
           colorId: null,
-          x: randomInDomain(domainMax),
-          y: randomInDomain(domainMax),
+          x: randomInDomain(domainMaxWidth),
+          y: randomInDomain(domainMaxHeight),
           neighbors: [],
         };
         if (!data.includes(nextPoint)) {
@@ -36,7 +81,7 @@ export default function ColoringGrid() {
         }
       }
     },
-    [randomInDomain]
+    [randomInDomain, domainMaxWidth, domainMaxHeight]
   );
 
   // iterate appends based on difficulty
@@ -52,19 +97,22 @@ export default function ColoringGrid() {
   const [mapPoints, setMapPoints] = useState(generateMapPoints());
 
   // dimensions of game board
-  const xScale = d3.scaleLinear().domain([0, domainMax]).range([0, domainMax]);
-  const yScale = d3.scaleLinear().domain([0, domainMax]).range([0, domainMax]);
+  const xScale = d3
+    .scaleLinear()
+    .domain([0, domainMaxWidth])
+    .range([0, domainMaxWidth]);
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, domainMaxHeight])
+    .range([0, domainMaxHeight]);
 
-  // delaunay triangulation paths
-  const delaunay = useMemo(() => {
-    const formattedData = mapPoints.map((d) => [xScale(d.x), yScale(d.y)]);
-    return d3.Delaunay.from(formattedData);
-  }, [mapPoints, xScale, yScale]);
-
+  // delaunay triangulation paths +
   // voronoi cell borders
   const voronoi = useMemo(() => {
-    return delaunay.voronoi([0, 0, domainMax, domainMax]);
-  }, [delaunay, domainMax]);
+    const formattedData = mapPoints.map((d) => [xScale(d.x), yScale(d.y)]);
+    const delaunay = d3.Delaunay.from(formattedData);
+    return delaunay.voronoi([0, 0, domainMaxWidth, domainMaxHeight]);
+  }, [mapPoints, xScale, yScale, domainMaxWidth, domainMaxHeight]);
 
   // voronoi data with neighbors
   const [voronoiData, setVoronoiData] = useState(
@@ -131,13 +179,6 @@ export default function ColoringGrid() {
     });
   };
 
-  // window dimensions
-  const getDimensions = () => {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    return [windowWidth, windowHeight];
-  };
-
   useEffect(() => {
     setMapPoints(generateMapPoints());
     setVictoryDismissed(false);
@@ -154,23 +195,28 @@ export default function ColoringGrid() {
     // eslint-disable-next-line
   }, [mapPoints]);
 
-  getDimensions();
-
   return (
-    <div className="color-grid">
+    <div className="color-grid" ref={targetRef}>
       {victoryDismissed || numNull > 0 ? (
         <>
-          <Voronoi
-            dim={domainMax}
-            data={voronoiData}
-            voronoi={voronoi}
-            callbackPaint={changeColorId}
-            callbackErase={removeColorId}
-          />
-          <span className="score">{numNull} to go!</span>
+            <Voronoi
+              width={domainMaxWidth}
+              height={domainMaxHeight}
+              data={voronoiData}
+              voronoi={voronoi}
+              callbackPaint={changeColorId}
+              callbackErase={removeColorId}
+            />
+          <span className="score">
+            {numNull > 0 ? `${numNull} to go!` : "Great Job!"}
+          </span>
         </>
       ) : (
-        <VictoryMessage callback={dismissVictory} dim={domainMax} />
+        <VictoryMessage
+          callback={dismissVictory}
+          width={domainMaxWidth}
+          height={domainMaxHeight}
+        />
       )}
       <div className="button-grid">
         <button
