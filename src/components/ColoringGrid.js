@@ -19,7 +19,7 @@ const useDimensions = (targetRef) => {
   const getDimensions = () => {
     return {
       width: targetRef.current ? targetRef.current.offsetWidth: Math.ceil(0.9*window.innerWidth),
-      height: targetRef.current ? targetRef.current.offsetHeight: Math.ceil(0.65*window.innerHeight)
+      height: targetRef.current ? targetRef.current.offsetHeight: Math.ceil(0.5*window.innerHeight)
     };
   };
 
