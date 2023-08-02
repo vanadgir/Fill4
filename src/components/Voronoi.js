@@ -1,7 +1,8 @@
 import { usePalette } from "../contexts/PaletteContext";
 
 export default function Voronoi({
-  dim,
+  width,
+  height,
   data,
   voronoi,
   callbackPaint,
@@ -11,7 +12,7 @@ export default function Voronoi({
 
   return (
     <div className="voronoi">
-      <svg width={dim} height={dim}>
+      <svg width={width} height={height}>
         {/*draw cells as polygons*/}
         {data.map((d, i) => {
           const path = voronoi.renderCell(i);
