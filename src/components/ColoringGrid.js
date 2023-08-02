@@ -14,13 +14,12 @@ import { usePalette } from "../contexts/PaletteContext";
 
 // custom hook for window dimensions
 const useDimensions = (targetRef) => {
-  console.log((targetRef.current ? targetRef.current.offsetWidth: ""))
-  
+ 
   // eslint-disable-next-line
   const getDimensions = () => {
     return {
-      width: targetRef.current ? targetRef.current.offsetWidth: window.innerWidth,
-      height: targetRef.current ? targetRef.current.offsetHeight: window.innerHeight
+      width: targetRef.current ? targetRef.current.offsetWidth: Math.ceil(0.9*window.innerWidth),
+      height: targetRef.current ? targetRef.current.offsetHeight: Math.ceil(0.65*window.innerHeight)
     };
   };
 
@@ -32,7 +31,6 @@ const useDimensions = (targetRef) => {
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, [handleResize]);
 
@@ -51,9 +49,6 @@ export default function ColoringGrid() {
   const [victoryDismissed, setVictoryDismissed] = useState(false);
   const targetRef = useRef(null);
   const dimensions = useDimensions(targetRef);
-
-  console.log('Width:', dimensions.width);
-  console.log('Height:', dimensions.height);
 
   // sidelength for game board
   const domainMaxWidth = dimensions.width;
