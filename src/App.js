@@ -2,20 +2,18 @@ import { useDifficulty } from "./contexts/DifficultyContext";
 import { PaletteProvider } from "./contexts/PaletteContext";
 import GameBoard from "./components/GameBoard";
 import ColorMenu from "./components/ColorMenu";
+import DateTime from "./components/DateTime";
 import "./App.css";
 import { useState } from "react";
 
 export default function App() {
-  const {
-    selectMapDifficulty,
-    selectColorDifficulty,
-  } = useDifficulty();
+  const { selectMapDifficulty, selectColorDifficulty } = useDifficulty();
 
   const [collapseTitle, setCollapseTitle] = useState(false);
 
   const toggleTitle = () => {
     setCollapseTitle(!collapseTitle);
-  }
+  };
 
   const title = (
     <h1 className={`title ${collapseTitle ? "collapsed" : ""}`}>
@@ -53,7 +51,7 @@ export default function App() {
 
   return (
     <div className="main">
-      <div onClick={toggleTitle}>{title}</div>
+      <div onClick={toggleTitle} className="title-bar">{title}</div>
       <PaletteProvider>
         <div className="game-bar">
           <div className={`left ${collapseTitle ? "hide" : ""}`}>
@@ -66,6 +64,7 @@ export default function App() {
         </div>
         <GameBoard />
       </PaletteProvider>
+      <DateTime />
     </div>
   );
 }

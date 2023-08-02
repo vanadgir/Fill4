@@ -202,9 +202,9 @@ export default function ColoringGrid() {
               callbackPaint={changeColorId}
               callbackErase={removeColorId}
             />
-          <span className="score">
+          <div className="score">
             {numNull > 0 ? `${numNull} to go!` : "Great Job!"}
-          </span>
+          </div>
         </>
       ) : (
         <VictoryMessage
